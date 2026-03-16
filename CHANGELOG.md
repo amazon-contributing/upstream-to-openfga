@@ -11,6 +11,7 @@ Try to keep listed changes to a concise bulleted list of simple explanations of 
 - Add Amazon Aurora DSQL as a supported storage backend.
 
 ### Changed
+- Update Aurora DSQL Go connector to v0.2.0. Pool settings are now passed via `pgxpool.Config` instead of `dsql.Config`.
 - HTTP gateway's internal gRPC client now uses dynamic TLS credentials that automatically update on certificate rotation via certwatcher, preventing connection failures when certificates are rotated (e.g., by cert-manager). [#2951](https://github.com/openfga/openfga/pull/2951)
 
 ### Fixed
