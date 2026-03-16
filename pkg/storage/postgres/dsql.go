@@ -58,21 +58,22 @@ func initDSQLDB(uri string, cfg *sqlcommon.Config) (*pgxpool.Pool, error) {
 		dsqlCfg.User = cfg.Username
 	}
 
-	// Apply OpenFGA pool settings
+	// Apply OpenFGA pool settings via pgxpool.Config.
+	poolCfg, _ := pgxpool.ParseConfig("")
 	if cfg.MaxOpenConns != 0 {
-		dsqlCfg.MaxConns = int32(cfg.MaxOpenConns)
+		poolCfg.MaxConns = int32(cfg.MaxOpenConns)
 	}
 	if cfg.MinOpenConns != 0 {
-		dsqlCfg.MinConns = int32(cfg.MinOpenConns)
+		poolCfg.MinConns = int32(cfg.MinOpenConns)
 	}
 	if cfg.ConnMaxLifetime != 0 {
-		dsqlCfg.MaxConnLifetime = cfg.ConnMaxLifetime
+		poolCfg.MaxConnLifetime = cfg.ConnMaxLifetime
 	}
 	if cfg.ConnMaxIdleTime != 0 {
-		dsqlCfg.MaxConnIdleTime = cfg.ConnMaxIdleTime
+		poolCfg.MaxConnIdleTime = cfg.ConnMaxIdleTime
 	}
 
-	pool, err := dsql.NewPool(context.Background(), dsqlCfg)
+	pool, err := dsql.NewPool(context.Background(), dsqlCfg, poolCfg)
 	if err != nil {
 		return nil, fmt.Errorf("create DSQL pool: %w", err)
 	}
